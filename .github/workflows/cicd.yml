@@ -1,34 +1,61 @@
-name: CI/CD Pipeline
+name: Node.js CI/CD Pipeline
 
 on:
   push:
-    branches:
-      - main
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
 
 jobs:
-  # print_the_text:
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #     - name: Git Clone
-  #       uses: actions/checkout@v3
-  #     - name: Print the text
-  #       run: |
-  #         echo "Hello from CI/CD Pipeline" > hello.txt
-  #         cat hello.txt
-  #         ls -la
-  #         pwd
-    build_the_application:
-      runs-on: ubuntu-latest
-      steps:
-        - name: Git Clone
-          uses: actions/checkout@v3
-        - name: Install node
-          uses: actions/setup-node@v3
-          with:
-            node-version: 22
-            cache: 'npm'
-        - name: Install dependencies
-          run: |
-            npm install
-            npm test
-       
+  test:
+    name: Test Job
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Install Dependencies
+        run: npm install
+
+      - name: Run Tests
+        run: |
+          npm run check > test-results.txt
+
+      - name: Upload Test Results
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-results
+          path: test-results.txt
+
+  deploy:
+    name: Deploy Job
+    needs: test
+    runs-on: self-hosted
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Download Test Results
+        uses: actions/download-artifact@v4
+        with:
+          name: test-results
+
+      - name: Display Test Results
+        run: cat test-results.txt
+
+
+      - name: Checkout and Deploy Application
+        run: |
+          cd ~/actions-runner/cicd-nodejs-app
+          git pull origin main
+          pm2 restart all
+
+
+
