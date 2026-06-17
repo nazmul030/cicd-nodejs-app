@@ -6,15 +6,30 @@ on:
       - main
 
 jobs:
-  print_the_text:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Git Clone
-        uses: actions/checkout@v3
-      - name: Print the text
-        run: |
-          echo "Hello from CI/CD Pipeline" > hello.txt
-          cat hello.txt
-          ls -la
-          pwd
-          
+  # print_the_text:
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - name: Git Clone
+  #       uses: actions/checkout@v3
+  #     - name: Print the text
+  #       run: |
+  #         echo "Hello from CI/CD Pipeline" > hello.txt
+  #         cat hello.txt
+  #         ls -la
+  #         pwd
+    build_the_application:
+      runs-on: ubuntu-latest
+      steps:
+        - name: Git Clone
+          uses: actions/checkout@v3
+        - name: Install node
+          uses: actions/setup-node@v3
+          with:
+            node-version: 22
+            cache: 'npm'
+        - name: Install dependencies
+          run: |
+            npm install
+            npm start
+            npm test
+       
