@@ -1,0 +1,30 @@
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  print_the_text:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Git Clone
+        uses: actions/checkout@v3
+      - name: Print the text
+        run: |
+          cat hello.txt
+          ls -la
+          pwd
+          whoami
+          date
+          uptime
+          free -h
+          df -h
+          top
+          ps aux
+          ps -ef
+          ps -ef | grep node
+          ps -ef | grep node | grep -v grep
+          ps -ef | grep node | grep -v grep | wc -l
+          ps -ef | grep node | grep -v grep | wc -l | awk '{print $1}'
