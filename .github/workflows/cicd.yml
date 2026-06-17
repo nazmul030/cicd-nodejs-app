@@ -36,7 +36,7 @@ jobs:
   deploy:
     name: Deploy Job
     needs: test
-    runs-on: [self-hosted, server]
+    runs-on: self-hosted
 
     steps:
       - name: Checkout Code
