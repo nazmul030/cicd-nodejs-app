@@ -13,18 +13,8 @@ jobs:
         uses: actions/checkout@v3
       - name: Print the text
         run: |
+          echo "Hello from CI/CD Pipeline" > hello.txt
           cat hello.txt
           ls -la
           pwd
-          whoami
-          date
-          uptime
-          free -h
-          df -h
-          top
-          ps aux
-          ps -ef
-          ps -ef | grep node
-          ps -ef | grep node | grep -v grep
-          ps -ef | grep node | grep -v grep | wc -l
-          ps -ef | grep node | grep -v grep | wc -l | awk '{print $1}'
+          
